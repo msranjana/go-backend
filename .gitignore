@@ -1,0 +1,36 @@
+# Environment variables
+.env
+.env.*
+
+# Go build outputs
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Build directories
+/bin/
+/dist/
+/build/
+
+# Coverage files
+coverage.out
+*.coverprofile
+
+# IDE/editor files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+temp/
