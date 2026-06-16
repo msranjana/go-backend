@@ -1,4 +1,4 @@
-# user-dob-api
+# Go - Backend Development
 
 REST API built with Go to manage users with date of birth. Returns age calculated dynamically.
 
