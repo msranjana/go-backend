@@ -94,7 +94,10 @@ func (h *UserHandler) Delete(c *fiber.Ctx) error {
 }
 
 func (h *UserHandler) List(c *fiber.Ctx) error {
-	res, err := h.svc.List(c.Context())
+	page, _ := strconv.Atoi(c.Query("page", "1"))
+	limit, _ := strconv.Atoi(c.Query("limit", "10"))
+
+	res, err := h.svc.List(c.Context(), int32(page), int32(limit))
 	if err != nil {
 		logger.Log.Error("list users", zap.Error(err))
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "internal error"})

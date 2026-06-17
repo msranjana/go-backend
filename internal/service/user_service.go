@@ -67,12 +67,25 @@ func (s *UserService) Update(ctx context.Context, id int32, req models.UpdateUse
 func (s *UserService) Delete(ctx context.Context, id int32) error {
 	return s.repo.Delete(ctx, id)
 }
-
-func (s *UserService) List(ctx context.Context) ([]models.UserWithAgeResponse, error) {
-	users, err := s.repo.List(ctx)
-	if err != nil {
-		return nil, err
+func (s *UserService) List(ctx context.Context, page, limit int32) (models.PaginatedUsersResponse, error) {
+	if page < 1 {
+		page = 1
 	}
+	if limit < 1 {
+		limit = 10
+	}
+	offset := (page - 1) * limit
+
+	total, err := s.repo.Count(ctx)
+	if err != nil {
+		return models.PaginatedUsersResponse{}, err
+	}
+
+	users, err := s.repo.List(ctx, limit, offset)
+	if err != nil {
+		return models.PaginatedUsersResponse{}, err
+	}
+
 	result := make([]models.UserWithAgeResponse, 0, len(users))
 	for _, u := range users {
 		result = append(result, models.UserWithAgeResponse{
@@ -82,5 +95,17 @@ func (s *UserService) List(ctx context.Context) ([]models.UserWithAgeResponse, e
 			Age:  calcAge(u.Dob),
 		})
 	}
-	return result, nil
+
+	totalPages := total / limit
+	if total%limit != 0 {
+		totalPages++
+	}
+
+	return models.PaginatedUsersResponse{
+		Data:       result,
+		Total:      total,
+		Page:       page,
+		Limit:      limit,
+		TotalPages: totalPages,
+	}, nil
 }

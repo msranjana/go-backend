@@ -65,3 +65,33 @@ func (q *Queries) ListUsers(ctx context.Context) ([]User, error) {
 	}
 	return users, rows.Err()
 }
+
+
+const countUsers = `SELECT COUNT(*) FROM users`
+
+func (q *Queries) CountUsers(ctx context.Context) (int32, error) {
+	var count int32
+	err := q.db.QueryRowContext(ctx, countUsers).Scan(&count)
+	return count, err
+}
+
+const listUsersPaginated = `
+SELECT id, name, dob FROM users ORDER BY id LIMIT $1 OFFSET $2
+`
+
+func (q *Queries) ListUsersPaginated(ctx context.Context, limit, offset int32) ([]User, error) {
+	rows, err := q.db.QueryContext(ctx, listUsersPaginated, limit, offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var users []User
+	for rows.Next() {
+		var u User
+		if err := rows.Scan(&u.ID, &u.Name, &u.Dob); err != nil {
+			return nil, err
+		}
+		users = append(users, u)
+	}
+	return users, rows.Err()
+}

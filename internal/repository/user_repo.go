@@ -31,6 +31,10 @@ func (r *UserRepository) Delete(ctx context.Context, id int32) error {
 	return r.q.DeleteUser(ctx, id)
 }
 
-func (r *UserRepository) List(ctx context.Context) ([]db.User, error) {
-	return r.q.ListUsers(ctx)
+func (r *UserRepository) List(ctx context.Context, limit, offset int32) ([]db.User, error) {
+	return r.q.ListUsersPaginated(ctx, limit, offset)
+}
+
+func (r *UserRepository) Count(ctx context.Context) (int32, error) {
+	return r.q.CountUsers(ctx)
 }

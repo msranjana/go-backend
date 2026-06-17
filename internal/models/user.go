@@ -22,3 +22,11 @@ type UserWithAgeResponse struct {
 	DOB  string `json:"dob"`
 	Age  int    `json:"age"`
 }
+
+type PaginatedUsersResponse struct {
+	Data       []UserWithAgeResponse `json:"data"`
+	Total      int32                 `json:"total"`
+	Page       int32                 `json:"page"`
+	Limit      int32                 `json:"limit"`
+	TotalPages int32                 `json:"total_pages"`
+}
