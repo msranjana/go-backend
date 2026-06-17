@@ -13,12 +13,11 @@ A RESTful API built with **Go** and **Fiber** to manage users with their date of
 
 ## Tech Stack
 
-* Go
-* Fiber
-* PostgreSQL
-* SQLC
-* Uber Zap
-* go-playground/validator
+- **GoFiber** — HTTP framework
+- **PostgreSQL** — database
+- **SQLC** — DB access layer
+- **Uber Zap** — logging
+- **go-playground/validator** — input validation
 
 ## Project Structure
 
@@ -172,9 +171,3 @@ DELETE /users/1
 ```bash
 go test ./...
 ```
-
-## Notes
-
-* Age is calculated dynamically from the stored date of birth.
-* Keep your `.env` file private and do not commit it to version control.
-* Commit a `.env.example` file instead of your actual credentials.
