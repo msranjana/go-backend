@@ -16,7 +16,10 @@ func NewUserRepository(q *db.Queries) *UserRepository {
 }
 
 func (r *UserRepository) Create(ctx context.Context, name string, dob time.Time) (db.User, error) {
-	return r.q.CreateUser(ctx, name, dob)
+	return r.q.CreateUser(ctx, db.CreateUserParams{
+		Name: name,
+		Dob:  dob,
+	})
 }
 
 func (r *UserRepository) GetByID(ctx context.Context, id int32) (db.User, error) {
@@ -24,7 +27,11 @@ func (r *UserRepository) GetByID(ctx context.Context, id int32) (db.User, error)
 }
 
 func (r *UserRepository) Update(ctx context.Context, id int32, name string, dob time.Time) (db.User, error) {
-	return r.q.UpdateUser(ctx, name, dob, id)
+	return r.q.UpdateUser(ctx, db.UpdateUserParams{
+		Name: name,
+		Dob:  dob,
+		ID:   id,
+	})
 }
 
 func (r *UserRepository) Delete(ctx context.Context, id int32) error {
@@ -32,9 +39,16 @@ func (r *UserRepository) Delete(ctx context.Context, id int32) error {
 }
 
 func (r *UserRepository) List(ctx context.Context, limit, offset int32) ([]db.User, error) {
-	return r.q.ListUsersPaginated(ctx, limit, offset)
+	return r.q.ListUsersPaginated(ctx, db.ListUsersPaginatedParams{
+		Limit:  limit,
+		Offset: offset,
+	})
 }
 
 func (r *UserRepository) Count(ctx context.Context) (int32, error) {
-	return r.q.CountUsers(ctx)
+	count, err := r.q.CountUsers(ctx)
+	if err != nil {
+		return 0, err
+	}
+	return int32(count), nil
 }

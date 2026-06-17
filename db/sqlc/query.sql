@@ -15,3 +15,9 @@ DELETE FROM users WHERE id = $1;
 
 -- name: ListUsers :many
 SELECT id, name, dob FROM users ORDER BY id;
+
+-- name: CountUsers :one
+SELECT COUNT(*) FROM users;
+
+-- name: ListUsersPaginated :many
+SELECT id, name, dob FROM users ORDER BY id LIMIT $1 OFFSET $2;
